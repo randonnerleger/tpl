@@ -36,14 +36,22 @@ function NavFixedOrNot(widthscreen)
 	}
 }
 
-function CloseOtherMenu(autre1,autre2,autre3) {
+function CloseOtherMenu(autre1,autre2,autre3,focus) {
+	if (focus) {
+		document.getElementById("q").focus();
+	}
 	var el_html = document.getElementsByTagName( 'html' )[0];
 	var el_body = document.getElementsByTagName( 'body' )[0];
 	el_html.className = el_html.className.replace( 'nav-is-stuck', '' );
 	el_body.style.paddingTop = '0px';
 	document.getElementById("menu-"+autre1+"-checkbox").checked = false;
 	document.getElementById("menu-"+autre2+"-checkbox").checked = false;
-	document.getElementById("menu-"+autre3+"-checkbox").checked = false;
+
+	var contextuel = document.getElementById("menu-"+autre3+"-checkbox");
+		if(contextuel){
+			contextuel.checked = false;
+		}
+
 }
 
 if ( window.addEventListener ) {
