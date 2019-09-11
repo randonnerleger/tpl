@@ -37,9 +37,13 @@ function NavFixedOrNot(widthscreen)
 }
 
 function CloseOtherMenu(autre1,autre2,autre3,focus) {
-	if (focus) {
+	var searchcheckbox = document.getElementById("menu-search-checkbox");
+	if (!searchcheckbox.checked && focus) {
 		document.getElementById("q").focus();
+	} else {
+		document.getElementById("q").blur();
 	}
+
 	var el_html = document.getElementsByTagName( 'html' )[0];
 	var el_body = document.getElementsByTagName( 'body' )[0];
 	el_html.className = el_html.className.replace( 'nav-is-stuck', '' );
@@ -161,3 +165,100 @@ window.addEventListener("keydown", function(e)
 
 
 }(window, document));
+
+// RGPD Video Consent
+function setCookie(cookieName, cookieValue, nDays) {
+	var today = new Date();
+	var expire = new Date();
+	if (nDays==null || nDays==0) nDays=1;
+	expire.setTime(today.getTime() + 3600000*24*nDays);
+	document.cookie = cookieName+"="+escape(cookieValue)+ ";expires="+expire.toGMTString()+"; path=/";
+}
+function getCookie(cookieName) {
+	var theCookie=" "+document.cookie;
+	var ind=theCookie.indexOf(" "+cookieName+"=");
+	if (ind==-1) ind=theCookie.indexOf(";"+cookieName+"=");
+	if (ind==-1 || cookieName=="") return "";
+	var ind1=theCookie.indexOf(";",ind+1);
+	if (ind1==-1) ind1=theCookie.length;
+	return unescape(theCookie.substring(ind+cookieName.length+2,ind1));
+}
+function deleteCookie(cookieName) {
+	var today = new Date();
+	var expire = new Date() - 30;
+	expire.setTime(today.getTime() - 3600000*24*90);
+	document.cookie = cookieName+"="+escape(cookieValue)+ ";expires="+expire.toGMTString();
+}
+
+function VideoConsentDisplay(vidid, source, width, height) {
+	var CookieConsent = getCookie('VideoConsentAcc');
+
+	document.getElementById('embedhover').style.display = 'none';
+
+	switch(CookieConsent) {
+		case 'true':
+			VideoConsentAccepted(vidid, source, width, height);
+			break;
+		case 'false':
+			VideoConsentRefused(vidid, source, width, height);
+			break;
+		default:
+			var parent = document.getElementById(vidid);
+			var container = document.getElementById(vidid + 'THUMB');
+			var conn = document.createElement('div');
+
+			// conn.style.position = 'absolute';
+			// conn.style.float = 'left';
+			// conn.style.width = '100%';
+			// conn.style.height = '98%';
+			conn.id = 'youtube-consent';
+
+			parent.insertBefore(conn, container);
+			conn.innerHTML= '<div class="inner"><strong>Information relative à vos données personnelles</strong><p>Randonner-Leger.org n\'héberge pas cette vidéo et n\'est responsable ni de son contenu, ni des données personnelles susceptibles d\'être exploitées par son hébergeur lors de son affichage en fonction de ses propres politiques de confidentialité (adresse IP, cookies...).</p><div class="consent"><input type="checkbox" name="memorise" id="memorise" value="true">&nbsp;<label for="memorise">Mémoriser mon choix et ne plus afficher ce message.</label></div><input class="" type="submit" onclick="VideoConsentAcceptCookies(\''+vidid+'\', \''+source+'\', \''+width+'\', \''+height+'\');" value="Voir la vidéo" />&nbsp;&nbsp;<input class="" type="submit" id="a_175" id="euCookieAcceptWP" onclick="VideoConsentRefuseCookies(\''+vidid+'\', \''+source+'\');" value="Regarder sur '+source+'" /></div>';
+	}
+
+}
+
+function VideoConsentAcceptCookies(vidid, source, width, height) {
+	if (document.getElementById('memorise').checked) {
+		setCookie('VideoConsentAcc', true, 365);
+	}
+	document.getElementById('youtube-consent').style.display = 'none';
+	VideoConsentAccepted(vidid, source, width, height);
+}
+
+function VideoConsentRefuseCookies(vidid, source) {
+	if (document.getElementById('memorise').checked) {
+		setCookie('VideoConsentAcc', false, 365);
+	}
+	document.getElementById('youtube-consent').style.display = 'none';
+	VideoConsentRefused(vidid, source);
+}
+
+function VideoConsentAccepted(vidid, source, width, height) {
+	switch(source) {
+		case 'youtube':
+			document.getElementById(vidid).innerHTML= '<div class="innervideo"><iframe src="https://www.youtube.com/embed/' + vidid + '" style="max-width:' + width + 'px;max-height:' + height + 'px;" allowfullscreen ></iframe></div>';
+			break;
+		case 'dailymotion':
+			document.getElementById(vidid).innerHTML= '<div class="innervideo"><iframe src="https://www.dailymotion.com/embed/video/' + vidid + '" style="max-width:480px;max-height:360px;" allowfullscreen ></iframe></div>';
+			break;
+		case 'vimeo':
+			document.getElementById(vidid).innerHTML= '<div class="innervideo"><iframe src="https://player.vimeo.com/video/' + vidid + '" style="max-width:480px;max-height:360px;" allowfullscreen ></iframe></div>';
+			break;
+	}
+}
+
+function VideoConsentRefused(vidid, source) {
+	switch(source) {
+		case 'youtube':
+			window.open('https://youtube.com/watch?v=' + vidid, '_blank');
+			break;
+		case 'dailymotion':
+			window.open('https://www.dailymotion.com/video/' + vidid, '_blank');
+			break;
+		case 'vimeo':
+			window.open('https://youtube.com/watch?v=' + vidid, '_blank');
+			break;
+	}
+}
