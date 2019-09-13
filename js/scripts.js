@@ -12,10 +12,9 @@ if (typeof (window.innerWidth) == 'number') {
 		}
 	}
 }
-NavFixedOrNot(myWidth);
+IsNavFixed(myWidth);
 
-function NavFixedOrNot(widthscreen)
-{
+function IsNavFixed(widthscreen) {
 
 	window.onscroll = function() {
 	var hasScrollY="scrollY"in window;
@@ -23,8 +22,12 @@ function NavFixedOrNot(widthscreen)
 
 		if(scroll>120) {
 			document.getElementById("top-page").className = 'visible';
+			document.getElementById("menu-switch-css").className = 'hidden';
+			document.getElementById("menu-switch-font-size").className = 'hidden';
 		} else {
 			document.getElementById("top-page").className = '';
+			document.getElementById("menu-switch-css").className = 'visible';
+			document.getElementById("menu-switch-font-size").className = 'visible';
 		}
 
 		if(scroll>120 && widthscreen>1024) {
@@ -36,6 +39,7 @@ function NavFixedOrNot(widthscreen)
 	}
 }
 
+// Fermer les slider menus et focus sur le search en responsive
 function CloseOtherMenu(autre1,autre2,autre3,focus) {
 	var searchcheckbox = document.getElementById("menu-search-checkbox");
 	if (!searchcheckbox.checked && focus) {
@@ -58,6 +62,7 @@ function CloseOtherMenu(autre1,autre2,autre3,focus) {
 
 }
 
+// Konami
 if ( window.addEventListener ) {
 var kkeys = [], konami = "38,38,40,40,37,39,37,39,82,76";
 var myfolder_rl=(myrl_info.folder_rl);
@@ -86,7 +91,6 @@ window.addEventListener("keydown", function(e)
 
 	MIT license
  */
-
 (function() {
 	var lastTime = 0;
 	var vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -114,10 +118,7 @@ window.addEventListener("keydown", function(e)
 }());
 
 
-/*
-	Sticky menu script
- */
-
+// Sticky menu script
 (function(w,d,undefined){
 	var el_html = d.documentElement,
 		el_body = d.getElementsByTagName('body')[0],
@@ -166,7 +167,7 @@ window.addEventListener("keydown", function(e)
 
 }(window, document));
 
-// RGPD Video Consent
+// Cookies
 function setCookie(cookieName, cookieValue, nDays) {
 	var today = new Date();
 	var expire = new Date();
@@ -190,8 +191,9 @@ function deleteCookie(cookieName) {
 	document.cookie = cookieName+"="+escape(cookieValue)+ ";expires="+expire.toGMTString();
 }
 
+// RGPD Video Consent
 function VideoConsentDisplay(vidid, source, width, height) {
-	var CookieConsent = getCookie('VideoConsentAcc');
+	var CookieConsent = getCookie('RLVideoConsent');
 
 	document.getElementById('embedhover').style.display = 'none';
 
@@ -221,7 +223,7 @@ function VideoConsentDisplay(vidid, source, width, height) {
 
 function VideoConsentAcceptCookies(vidid, source, width, height) {
 	if (document.getElementById('memorise').checked) {
-		setCookie('VideoConsentAcc', true, 365);
+		setCookie('RLVideoConsent', true, 365);
 	}
 	document.getElementById('youtube-consent').style.display = 'none';
 	VideoConsentAccepted(vidid, source, width, height);
@@ -229,7 +231,7 @@ function VideoConsentAcceptCookies(vidid, source, width, height) {
 
 function VideoConsentRefuseCookies(vidid, source) {
 	if (document.getElementById('memorise').checked) {
-		setCookie('VideoConsentAcc', false, 365);
+		setCookie('RLVideoConsent', false, 365);
 	}
 	document.getElementById('youtube-consent').style.display = 'none';
 	VideoConsentRefused(vidid, source);
@@ -261,4 +263,36 @@ function VideoConsentRefused(vidid, source) {
 			window.open('https://youtube.com/watch?v=' + vidid, '_blank');
 			break;
 	}
+}
+
+// SWITCH CSS
+document.getElementById('cssID').onclick = function () {SwitchCss();};
+function SwitchCss() {
+	var css = document.getElementById('MyCss').href;
+	var user = getCookie('RLFavoriteCss');
+		if ( user == 'RL_Sombre' ) {
+			var replace = css.replace('RL_Sombre','RL_Clair');
+			document.getElementById("MyCss").href = replace;
+			document.body.style.background = '#d6dce4';
+			setCookie('RLFavoriteCss', 'RL_Clair', 365);
+		} else {
+		if (user == "" || user != "" || user == 'RL_Clair') {
+			var replace = css.replace('RL_Clair','RL_Sombre');
+			document.getElementById("MyCss").href = replace;
+			document.body.style.background = '#393939';
+			setCookie('RLFavoriteCss', 'RL_Sombre', 365);
+		}
+	}
+}
+
+// FONT SIZE BUTTON
+document.getElementById('switch-font-size-plus').onclick = function () {SwitchFontSize('bigger');};
+document.getElementById('switch-font-size-minus').onclick = function () {SwitchFontSize('smaller');};
+function SwitchFontSize(action) {
+	var user = getCookie('RLFontSize');
+	var fontsize = (user == "") ? 1.4 : parseFloat(user);
+	fontsize = (action == 'bigger') ? fontsize + .05 : fontsize - .05;
+	fontsize = fontsize.toFixed(2)
+	document.getElementById('MyCustomCss').innerHTML = '.tclcon a, .pun .postmsg, #dokuwiki__site .page {font-size: ' + fontsize + 'rem;}'
+	setCookie('RLFontSize', fontsize, 365);
 }
