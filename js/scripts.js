@@ -12,10 +12,9 @@ if (typeof (window.innerWidth) == 'number') {
 		}
 	}
 }
-NavFixedOrNot(myWidth);
+IsNavFixed(myWidth);
 
-function NavFixedOrNot(widthscreen)
-{
+function IsNavFixed(widthscreen) {
 
 	window.onscroll = function() {
 	var hasScrollY="scrollY"in window;
@@ -23,8 +22,12 @@ function NavFixedOrNot(widthscreen)
 
 		if(scroll>120) {
 			document.getElementById("top-page").className = 'visible';
+			document.getElementById("menu-switch-css").className = 'hidden';
+			document.getElementById("menu-switch-font-size").className = 'hidden';
 		} else {
 			document.getElementById("top-page").className = '';
+			document.getElementById("menu-switch-css").className = 'visible';
+			document.getElementById("menu-switch-font-size").className = 'visible';
 		}
 
 		if(scroll>120 && widthscreen>1024) {
@@ -36,10 +39,15 @@ function NavFixedOrNot(widthscreen)
 	}
 }
 
+// Fermer les slider menus et focus sur le search en responsive
 function CloseOtherMenu(autre1,autre2,autre3,focus) {
-	if (focus) {
+	var searchcheckbox = document.getElementById("menu-search-checkbox");
+	if (!searchcheckbox.checked && focus) {
 		document.getElementById("q").focus();
+	} else {
+		document.getElementById("q").blur();
 	}
+
 	var el_html = document.getElementsByTagName( 'html' )[0];
 	var el_body = document.getElementsByTagName( 'body' )[0];
 	el_html.className = el_html.className.replace( 'nav-is-stuck', '' );
@@ -54,6 +62,7 @@ function CloseOtherMenu(autre1,autre2,autre3,focus) {
 
 }
 
+// Konami
 if ( window.addEventListener ) {
 var kkeys = [], konami = "38,38,40,40,37,39,37,39,82,76";
 var myfolder_rl=(myrl_info.folder_rl);
@@ -82,7 +91,6 @@ window.addEventListener("keydown", function(e)
 
 	MIT license
  */
-
 (function() {
 	var lastTime = 0;
 	var vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -110,10 +118,7 @@ window.addEventListener("keydown", function(e)
 }());
 
 
-/*
-	Sticky menu script
- */
-
+// Sticky menu script
 (function(w,d,undefined){
 	var el_html = d.documentElement,
 		el_body = d.getElementsByTagName('body')[0],
@@ -161,3 +166,133 @@ window.addEventListener("keydown", function(e)
 
 
 }(window, document));
+
+// Cookies
+function setCookie(cookieName, cookieValue, nDays) {
+	var today = new Date();
+	var expire = new Date();
+	if (nDays==null || nDays==0) nDays=1;
+	expire.setTime(today.getTime() + 3600000*24*nDays);
+	document.cookie = cookieName+"="+escape(cookieValue)+ ";expires="+expire.toGMTString()+"; path=/";
+}
+function getCookie(cookieName) {
+	var theCookie=" "+document.cookie;
+	var ind=theCookie.indexOf(" "+cookieName+"=");
+	if (ind==-1) ind=theCookie.indexOf(";"+cookieName+"=");
+	if (ind==-1 || cookieName=="") return "";
+	var ind1=theCookie.indexOf(";",ind+1);
+	if (ind1==-1) ind1=theCookie.length;
+	return unescape(theCookie.substring(ind+cookieName.length+2,ind1));
+}
+function deleteCookie(cookieName) {
+	var today = new Date();
+	var expire = new Date() - 30;
+	expire.setTime(today.getTime() - 3600000*24*90);
+	document.cookie = cookieName+"="+escape(cookieValue)+ ";expires="+expire.toGMTString();
+}
+
+// RGPD Video Consent
+function VideoConsentDisplay(vidid, source, width, height) {
+	var CookieConsent = getCookie('RLVideoConsent');
+
+	document.getElementById('embedhover').style.display = 'none';
+
+	switch(CookieConsent) {
+		case 'true':
+			VideoConsentAccepted(vidid, source, width, height);
+			break;
+		case 'false':
+			VideoConsentRefused(vidid, source, width, height);
+			break;
+		default:
+			var parent = document.getElementById(vidid);
+			var container = document.getElementById(vidid + 'THUMB');
+			var conn = document.createElement('div');
+
+			// conn.style.position = 'absolute';
+			// conn.style.float = 'left';
+			// conn.style.width = '100%';
+			// conn.style.height = '98%';
+			conn.id = 'youtube-consent';
+
+			parent.insertBefore(conn, container);
+			conn.innerHTML= '<div class="inner"><strong>Information relative à vos données personnelles</strong><p>Randonner-Leger.org n\'héberge pas cette vidéo et n\'est responsable ni de son contenu, ni des données personnelles susceptibles d\'être exploitées par son hébergeur lors de son affichage en fonction de ses propres politiques de confidentialité (adresse IP, cookies...).</p><div class="consent"><input type="checkbox" name="memorise" id="memorise" value="true">&nbsp;<label for="memorise">Mémoriser mon choix et ne plus afficher ce message.</label></div><input class="" type="submit" onclick="VideoConsentAcceptCookies(\''+vidid+'\', \''+source+'\', \''+width+'\', \''+height+'\');" value="Voir la vidéo" />&nbsp;&nbsp;<input class="" type="submit" id="a_175" id="euCookieAcceptWP" onclick="VideoConsentRefuseCookies(\''+vidid+'\', \''+source+'\');" value="Regarder sur '+source+'" /></div>';
+	}
+
+}
+
+function VideoConsentAcceptCookies(vidid, source, width, height) {
+	if (document.getElementById('memorise').checked) {
+		setCookie('RLVideoConsent', true, 365);
+	}
+	document.getElementById('youtube-consent').style.display = 'none';
+	VideoConsentAccepted(vidid, source, width, height);
+}
+
+function VideoConsentRefuseCookies(vidid, source) {
+	if (document.getElementById('memorise').checked) {
+		setCookie('RLVideoConsent', false, 365);
+	}
+	document.getElementById('youtube-consent').style.display = 'none';
+	VideoConsentRefused(vidid, source);
+}
+
+function VideoConsentAccepted(vidid, source, width, height) {
+	switch(source) {
+		case 'youtube':
+			document.getElementById(vidid).innerHTML= '<div class="innervideo"><iframe src="https://www.youtube.com/embed/' + vidid + '" style="max-width:' + width + 'px;max-height:' + height + 'px;" allowfullscreen ></iframe></div>';
+			break;
+		case 'dailymotion':
+			document.getElementById(vidid).innerHTML= '<div class="innervideo"><iframe src="https://www.dailymotion.com/embed/video/' + vidid + '" style="max-width:480px;max-height:360px;" allowfullscreen ></iframe></div>';
+			break;
+		case 'vimeo':
+			document.getElementById(vidid).innerHTML= '<div class="innervideo"><iframe src="https://player.vimeo.com/video/' + vidid + '" style="max-width:480px;max-height:360px;" allowfullscreen ></iframe></div>';
+			break;
+	}
+}
+
+function VideoConsentRefused(vidid, source) {
+	switch(source) {
+		case 'youtube':
+			window.open('https://youtube.com/watch?v=' + vidid, '_blank');
+			break;
+		case 'dailymotion':
+			window.open('https://www.dailymotion.com/video/' + vidid, '_blank');
+			break;
+		case 'vimeo':
+			window.open('https://youtube.com/watch?v=' + vidid, '_blank');
+			break;
+	}
+}
+
+// SWITCH CSS
+document.getElementById('cssID').onclick = function () {SwitchCss();};
+function SwitchCss() {
+	var css = document.getElementById('MyCss').href;
+	var user = getCookie('RLFavoriteCss');
+		if ( user == 'RL_Sombre' ) {
+			var replace = css.replace('RL_Sombre','RL_Clair');
+			document.getElementById("MyCss").href = replace;
+			document.body.style.background = '#d6dce4';
+			setCookie('RLFavoriteCss', 'RL_Clair', 365);
+		} else {
+		if (user == "" || user != "" || user == 'RL_Clair') {
+			var replace = css.replace('RL_Clair','RL_Sombre');
+			document.getElementById("MyCss").href = replace;
+			document.body.style.background = '#393939';
+			setCookie('RLFavoriteCss', 'RL_Sombre', 365);
+		}
+	}
+}
+
+// FONT SIZE BUTTON
+document.getElementById('switch-font-size-plus').onclick = function () {SwitchFontSize('bigger');};
+document.getElementById('switch-font-size-minus').onclick = function () {SwitchFontSize('smaller');};
+function SwitchFontSize(action) {
+	var user = getCookie('RLFontSize');
+	var fontsize = (user == "") ? 1.4 : parseFloat(user);
+	fontsize = (action == 'bigger') ? fontsize + .05 : fontsize - .05;
+	fontsize = fontsize.toFixed(2)
+	document.getElementById('MyCustomCss').innerHTML = '.tclcon a, .pun .postmsg, #dokuwiki__site .page {font-size: ' + fontsize + 'rem;}'
+	setCookie('RLFontSize', fontsize, 365);
+}
