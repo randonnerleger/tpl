@@ -270,29 +270,33 @@ document.getElementById('cssID').onclick = function () {SwitchCss();};
 function SwitchCss() {
 	var css = document.getElementById('MyCss').href;
 	var user = getCookie('RLFavoriteCss');
-		if ( user == 'RL_Sombre' ) {
-			var replace = css.replace('RL_Sombre','RL_Clair');
-			document.getElementById("MyCss").href = replace;
-			document.body.style.background = '#d6dce4';
-			setCookie('RLFavoriteCss', 'RL_Clair', 365);
-		} else {
-		if (user == "" || user != "" || user == 'RL_Clair') {
-			var replace = css.replace('RL_Clair','RL_Sombre');
-			document.getElementById("MyCss").href = replace;
-			document.body.style.background = '#393939';
-			setCookie('RLFavoriteCss', 'RL_Sombre', 365);
-		}
+
+	if ( user == 'RL_Sombre' ) {
+		var replace = css.replace('RL_Sombre','RL_Clair');
+		document.getElementById("MyCss").href = replace;
+		document.body.style.background = '#d6dce4';
+		setCookie('RLFavoriteCss', 'RL_Clair', 365);
+	} else {
+		var replace = css.replace('RL_Clair','RL_Sombre');
+		document.getElementById("MyCss").href = replace;
+		document.body.style.background = '#393939';
+		setCookie('RLFavoriteCss', 'RL_Sombre', 365);
 	}
+
 }
 
 // FONT SIZE BUTTON
 document.getElementById('switch-font-size-plus').onclick = function () {SwitchFontSize('bigger');};
 document.getElementById('switch-font-size-minus').onclick = function () {SwitchFontSize('smaller');};
+document.getElementById('switch-font-size-reset').onclick = function () {
+	document.getElementById('MyCustomCss').innerHTML = '';
+	setCookie('RLFontSize', '', -365);
+};
 function SwitchFontSize(action) {
 	var user = getCookie('RLFontSize');
 	var fontsize = (user == "") ? 1.4 : parseFloat(user);
 	fontsize = (action == 'bigger') ? fontsize + .05 : fontsize - .05;
 	fontsize = fontsize.toFixed(2)
-	document.getElementById('MyCustomCss').innerHTML = '.tclcon a, .pun .postmsg, #dokuwiki__site .page {font-size: ' + fontsize + 'rem;}'
+	document.getElementById('MyCustomCss').innerHTML = '.tclcon a, .pun .postmsg, #dokuwiki__site .page {font-size: ' + fontsize + 'rem;}';
 	setCookie('RLFontSize', fontsize, 365);
 }
