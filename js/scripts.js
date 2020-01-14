@@ -260,7 +260,7 @@ function VideoConsentRefused(vidid, source) {
 			window.open('https://www.dailymotion.com/video/' + vidid, '_blank');
 			break;
 		case 'vimeo':
-			window.open('https://youtube.com/watch?v=' + vidid, '_blank');
+			window.open('https://vimeo.com/' + vidid, '_blank');
 			break;
 	}
 }
