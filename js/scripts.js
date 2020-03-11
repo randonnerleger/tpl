@@ -297,6 +297,6 @@ function SwitchFontSize(action) {
 	var fontsize = (user == "") ? 1.4 : parseFloat(user);
 	fontsize = (action == 'bigger') ? fontsize + .05 : fontsize - .05;
 	fontsize = fontsize.toFixed(2)
-	document.getElementById('MyCustomCss').innerHTML = '.tclcon a, .pun .postmsg, #dokuwiki__site .page {font-size: ' + fontsize + 'rem;}';
+	document.getElementById('MyCustomCss').innerHTML = '.tclcon a, .pun .postmsg, #punpost .txtarea textarea, #punedit .txtarea textarea, #dokuwiki__site .page {font-size: ' + fontsize + 'rem; line-height: ' + fontsize + 'rem;}';
 	setCookie('RLFontSize', fontsize, 365);
 }
