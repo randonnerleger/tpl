@@ -39,6 +39,16 @@ function IsNavFixed(widthscreen) {
 	}
 }
 
+// Autofocus username menuG quand on clique sur le bouton "Identification"
+function FocusOnUserName() {
+	var idLabel = document.getElementById("menug-identification");
+	if (!idLabel.checked && focus) {
+		document.getElementById("username").focus();
+	} else {
+		document.getElementById("username").blur();
+	}
+}
+
 // Fermer les slider menus et focus sur le search en responsive
 function CloseOtherMenu(autre1,autre2,autre3,focus) {
 	var searchcheckbox = document.getElementById("menu-search-checkbox");
