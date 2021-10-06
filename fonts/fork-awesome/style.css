@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'ForkAwesome';
   src:
-    url('fonts/ForkAwesome.ttf?nluhty') format('truetype'),
-    url('fonts/ForkAwesome.woff?nluhty') format('woff'),
-    url('fonts/ForkAwesome.svg?nluhty#ForkAwesome') format('svg');
+    url('fonts/ForkAwesome.ttf?n2zchu') format('truetype'),
+    url('fonts/ForkAwesome.woff?n2zchu') format('woff'),
+    url('fonts/ForkAwesome.svg?n2zchu#ForkAwesome') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -24,35 +24,29 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.fa-comments-o:before {
-  content: "\f0e6";
+.fa-caret-down:before {
+  content: "\f0d7";
 }
-.fa-lightbulb-o:before {
-  content: "\f0eb";
+.fa-arrows-v:before {
+  content: "\f07d";
 }
-.fa-file-image-o:before {
-  content: "\f1c5";
-}
-.fa-user:before {
-  content: "\f007";
-}
-.fa-calendar-o:before {
-  content: "\f133";
-}
-.fa-book:before {
-  content: "\f02d";
-}
-.fa-users:before {
-  content: "\f0c0";
+.fa-repeat:before {
+  content: "\f01e";
 }
 .fa-search:before {
   content: "\f002";
+}
+.fa-user:before {
+  content: "\f007";
 }
 .fa-check:before {
   content: "\f00c";
 }
 .fa-times:before {
   content: "\f00d";
+}
+.fa-book:before {
+  content: "\f02d";
 }
 .fa-font:before {
   content: "\f031";
@@ -69,6 +63,9 @@
 .fa-sign-in:before {
   content: "\f090";
 }
+.fa-users:before {
+  content: "\f0c0";
+}
 .fa-link:before {
   content: "\f0c1";
 }
@@ -77,6 +74,15 @@
 }
 .fa-undo:before {
   content: "\f0e2";
+}
+.fa-comments-o:before {
+  content: "\f0e6";
+}
+.fa-lightbulb-o:before {
+  content: "\f0eb";
+}
+.fa-calendar-o:before {
+  content: "\f133";
 }
 .fa-chevron-circle-left:before {
   content: "\f137";
@@ -92,4 +98,7 @@
 }
 .fa-plus-square-o:before {
   content: "\f196";
+}
+.fa-file-image-o:before {
+  content: "\f1c5";
 }
